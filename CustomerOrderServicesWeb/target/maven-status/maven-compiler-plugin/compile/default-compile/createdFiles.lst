@@ -1,0 +1,4 @@
+org/pwte/example/resources/ProductResource.class
+org/pwte/example/resources/CategoryResource.class
+org/pwte/example/resources/CustomerOrderResource.class
+org/pwte/example/app/CustomerServicesApp.class
