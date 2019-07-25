@@ -1,0 +1,5 @@
+org/pwte/example/jpa/test/ProductSearchServiceTest.class
+org/pwte/example/jaxrs/test/CustomerOrderRESTTest$1.class
+org/pwte/example/jaxrs/test/CustomerOrderRESTTest.class
+org/pwte/example/jpa/test/CustomerOrderServicesTest.class
+org/pwte/example/jaxrs/test/ProductRESTSearchTest.class
