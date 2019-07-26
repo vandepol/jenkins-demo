@@ -10,7 +10,7 @@ openshift.withCluster() {
   env.STAGE = "${APP_NAME}-stage"
   env.PROD = "${APP_NAME}-prod"
   
-  
+  env.REGISTRY_ROUTE = "docker-registry.default.svc:5000"
   env.EXTERNAL_IMAGE_REPO_URL = "harbor.jkwong.cloudns.cx"
   env.EXTERNAL_IMAGE_REPO_NAMESPACE = "roland-demo"
   env.EXTERNAL_IMAGE_REPO_CREDENTIALS = "harbor"
