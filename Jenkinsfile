@@ -103,8 +103,8 @@ spec:
                       echo "Username: AFpasswd: ${env.AFpasswd}"
                       echo "Username: AFuser: ${params.AFuser}"
                       echo "Username: AFpasswd: ${params.AFpasswd}"
-                      echo "Username: AFuser: ${AFuser}"
-                      echo "Username: AFpasswd: ${AFpasswd}"
+                //      echo "Username: AFuser: ${AFuser}"
+                //      echo "Username: AFpasswd: ${AFpasswd}"
                       
                       withCredentials([usernamePassword(credentialsId: "${env.EXTERNAL_IMAGE_REPO_CREDENTIALS}", passwordVariable: 'AFpasswd', usernameVariable: 'AFuser')]) {
                               sh """
