@@ -117,7 +117,7 @@ spec:
                               --src-tls-verify=false \
                               --dest-creds vandepol:42L0LN5we8 \
                               --dest-tls-verify=false \
-                              docker://${env.BUILD}/${env.APP_NAME}:latest \
+                              docker://docker-registry.default.svc:5000/roland-demo-build/roland-demo \
                               docker://${env.DST_IMAGE}
                               """
                               println("Image is successfully pushed to https://${env.DST_IMAGE}")
