@@ -9,6 +9,7 @@ openshift.withCluster() {
   env.DEV = "${APP_NAME}-dev"
   env.STAGE = "${APP_NAME}-stage"
   env.PROD = "${APP_NAME}-prod"
+  
 }
 
 pipeline {
@@ -110,9 +111,9 @@ spec:
                               /usr/bin/skopeo copy \
                               --src-creds openshift:${openshift_token} \
                               --src-tls-verify=false \
-                              --dest-creds ${env.AFuser}:${env.AFpasswd} \
+                              --dest-creds vandepol:42L0LN5we8 \
                               --dest-tls-verify=false \
-                              docker://${env.BUILD}/${env.APP_NAME} \
+                              docker://${env.BUILD}/${env.APP_NAME}:latest \
                               docker://vandepol/jenkins-test
                               """
                               println("Image is successfully pushed to https://${env.DST_IMAGE}")
