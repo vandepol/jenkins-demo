@@ -36,47 +36,47 @@ pipeline {
         }
     }
     // Build Application using Maven
-//    stage('Maven build') {
-//      steps {
-//        sh """
-//        env
-//        mvn -v 
-//        cd CustomerOrderServicesProject
-//        mvn clean package
-//        """
-//      }
-//    }
+    stage('Maven build') {
+      steps {
+        sh """
+        env
+        mvn -v 
+        cd CustomerOrderServicesProject
+        mvn clean package
+        """
+      }
+    }
 //      
 //    // Run Maven unit tests
-//    stage('Unit Test'){
-//     steps {
-//        sh """
-//        mvn -v 
-//        cd CustomerOrderServicesProject
-//        mvn test
-//        """
-//      }
-//    }
+    stage('Unit Test'){
+     steps {
+        sh """
+        mvn -v 
+        cd CustomerOrderServicesProject
+        mvn test
+        """
+      }
+    }
       
     // Build Container Image using the artifacts produced in previous stages
-//    stage('Build Liberty App Image'){
-//     steps {
-//        script {
-//          // Build container image using local Openshift cluster
-//          openshift.withCluster() {
-//            openshift.withProject() {
-//              timeout (time: 10, unit: 'MINUTES') {
-//                // run the build and wait for completion
-//                def build = openshift.selector("bc", "${params.APPLICATION_NAME}").startBuild("--from-dir=.")
-//                                    
-//                // print the build logs
-//                build.logs('-f')
-//              }
-//            }        
-//          }
-//        }
-//      }
-//    } 
+    stage('Build Liberty App Image'){
+     steps {
+        script {
+          // Build container image using local Openshift cluster
+          openshift.withCluster() {
+            openshift.withProject() {
+              timeout (time: 10, unit: 'MINUTES') {
+                // run the build and wait for completion
+                def build = openshift.selector("bc", "${params.APPLICATION_NAME}").startBuild("--from-dir=.")
+                                    
+                // print the build logs
+                build.logs('-f')
+              }
+            }        
+          }
+        }
+      }
+    } 
     
     
     stage ('Push Container Image') {
