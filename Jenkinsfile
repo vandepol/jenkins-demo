@@ -92,7 +92,7 @@ spec:
 
           steps {
               script {
-                  def srcImage = ${env.BUILD}/${env.APP_NAME}:latest
+                  def srcImage = ${env.BUILD}/${env.APP_NAME}
 
                   openshift.withCluster() {
                       openshift.withProject() {
