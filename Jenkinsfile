@@ -98,14 +98,14 @@ spec:
                         echo "APPLICATION_NAME: ${params.APPLICATION_NAME}"
                       
                       def openshift_token = readFile "/var/run/secrets/kubernetes.io/serviceaccount/token"
-                      echo "Username: AFuser: ${AFuser}"
-                      echo "Username: AFpasswd: ${AFpasswd}"
+                      echo "Username: AFuser: ${env.AFuser}"
+                      echo "Username: AFpasswd: ${env.AFpasswd}"
                       withCredentials([usernamePassword(credentialsId: "${env.EXTERNAL_IMAGE_REPO_CREDENTIALS}", passwordVariable: 'AFpasswd', usernameVariable: 'AFuser')]) {
                               sh """
                               /usr/bin/skopeo copy \
                               --src-creds openshift:${openshift_token} \
                               --src-tls-verify=false \
-                              --dest-creds ${AFuser}:${AFpasswd} \
+                              --dest-creds ${env.AFuser}:${env.AFpasswd} \
                               --dest-tls-verify=false \
                               docker://${env.BUILD}/${env.APP_NAME} \
                               docker://vandepol/jenkins-test
