@@ -90,8 +90,10 @@ spec:
             }
           }
 
-//          steps {
-//              script {
+          steps {
+              script {
+              }
+          }
 //                  def srcImage = ${env.BUILD}/${env.APP_NAME}
 //
 //                  openshift.withCluster() {
