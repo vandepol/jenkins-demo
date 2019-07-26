@@ -108,7 +108,7 @@ spec:
                       
                       def srcImage = OUTPUT_IMAGE
                      
-                      println "source image: ${srcImage}, dest image: ${env.DST_IMAGE}
+                      println "source image: ${srcImage}, dest image: ${env.DST_IMAGE}"
                       
                       def openshift_token = readFile "/var/run/secrets/kubernetes.io/serviceaccount/token"
                       echo "Username: AFuser: ${env.AFuser}"
@@ -116,7 +116,7 @@ spec:
                       echo "Username: AFuser: ${params.AFuser}"
                       echo "Username: AFpasswd: ${params.AFpasswd}"
                       
-                      //withCredentials([usernamePassword(credentialsId: "${env.EXTERNAL_IMAGE_REPO_CREDENTIALS}", passwordVariable: 'username', usernameVariable: 'password')]) {
+                      withCredentials([usernamePassword(credentialsId: "${env.EXTERNAL_IMAGE_REPO_CREDENTIALS}", passwordVariable: 'username', usernameVariable: 'password')]) {
                               sh """
                               /usr/bin/skopeo copy \
                               --src-creds openshift:${openshift_token} \
@@ -127,7 +127,7 @@ spec:
                               docker://${env.DST_IMAGE}
                               """
                               println("Image is successfully pushed to https://${env.DST_IMAGE}")
-                     //     }
+                          }
                     }
                 }
             }
