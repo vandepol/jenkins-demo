@@ -91,9 +91,15 @@ spec:
           }
 
           steps {
-              script {
-              }
-          }
+            script {
+                openshift.withCluster() {
+                    openshift.withProject() {
+                        echo "Using project: ${openshift.project()}"
+                        echo "APPLICATION_NAME: ${params.APPLICATION_NAME}"
+                    }
+                }
+            }
+        }
 //                  def srcImage = ${env.BUILD}/${env.APP_NAME}
 //
 //                  openshift.withCluster() {
