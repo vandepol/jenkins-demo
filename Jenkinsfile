@@ -96,6 +96,22 @@ spec:
                     openshift.withProject() {
                         echo "Using project: ${openshift.project()}"
                         echo "APPLICATION_NAME: ${params.APPLICATION_NAME}"
+                      
+                      def openshift_token = readFile "/var/run/secrets/kubernetes.io/serviceaccount/token"
+                      echo "Username: AFuser: ${AFuser}"
+                      echo "Username: AFpasswd: ${AFpasswd}"
+                      withCredentials([usernamePassword(credentialsId: "${env.EXTERNAL_IMAGE_REPO_CREDENTIALS}", passwordVariable: 'AFpasswd', usernameVariable: 'AFuser')]) {
+//                              sh """
+//                              /usr/bin/skopeo copy \
+//                              --src-creds openshift:${openshift_token} \
+//                              --src-tls-verify=false \
+//                              --dest-creds ${AFuser}:${AFpasswd} \
+//                              --dest-tls-verify=false \
+//                              docker://${srcImage} \
+//                              docker://${env.DST_IMAGE}
+//                              """
+//                              println("Image is successfully pushed to https://${env.DST_IMAGE}")
+//                          }
                     }
                 }
             }
