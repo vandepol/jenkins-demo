@@ -158,6 +158,37 @@ spec:
 //              }
 //          }
         }
+stage('Promote to Dev') {
+      steps {
+        script {
+          openshift.withCluster() {
+            openshift.withProject() {
+              openshift.tag("${env.BUILD}/${env.APP_NAME}:latest", "${env.DEV}/${env.APP_NAME}:latest")
+            }
+          }
+        }
+      }
+    }
+
+    stage('Promote to Stage') {
+      steps {
+        script {
+          openshift.withCluster() {
+            openshift.withProject() {
+              openshift.tag("${env.DEV}/${env.APP_NAME}:latest", "${env.STAGE}/${env.APP_NAME}:latest")
+            }
+          }
+        }
+      }
+    }
+
+    stage('Promotion gate') {
+      steps {
+        script {
+          input message: 'Promote application to Production?'
+        }
+      }
+    }
 
   }
 }
