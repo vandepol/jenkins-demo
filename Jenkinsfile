@@ -10,6 +10,12 @@ openshift.withCluster() {
   env.STAGE = "${APP_NAME}-stage"
   env.PROD = "${APP_NAME}-prod"
   
+  
+  env.EXTERNAL_IMAGE_REPO_URL = "harbor.jkwong.cloudns.cx"
+  env.EXTERNAL_IMAGE_REPO_NAMESPACE = "roland-demo"
+  env.EXTERNAL_IMAGE_REPO_CREDENTIALS = "harbor"
+  env.DST_IMAGE = "${env.EXTERNAL_IMAGE_REPO_URL}/${env.EXTERNAL_IMAGE_REPO_NAMESPACE}/${env.APP_NAME}:${env.BUILD_NUMBER}"
+  
 }
 
 pipeline {
@@ -111,7 +117,7 @@ spec:
                               /usr/bin/skopeo copy \
                               --src-creds openshift:${openshift_token} \
                               --src-tls-verify=false \
-                              --dest-creds vandepol:42L0LN5we8 \
+                              --dest-creds ${AFuser}:${AFpassword} \
                               --dest-tls-verify=false \
                               docker://${env.BUILD}/${env.APP_NAME}:latest \
                               docker://vandepol/jenkins-test
