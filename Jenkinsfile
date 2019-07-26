@@ -116,7 +116,7 @@ spec:
                       echo "Username: AFuser: ${params.AFuser}"
                       echo "Username: AFpasswd: ${params.AFpasswd}"
                       
-                      withCredentials([usernamePassword(credentialsId: "${env.EXTERNAL_IMAGE_REPO_CREDENTIALS}", passwordVariable: 'username', usernameVariable: 'password')]) {
+                     // withCredentials([usernamePassword(credentialsId: "${env.EXTERNAL_IMAGE_REPO_CREDENTIALS}", passwordVariable: 'username', usernameVariable: 'password')]) {
                               sh """
                               /usr/bin/skopeo copy \
                               --src-creds openshift:${openshift_token} \
@@ -127,7 +127,7 @@ spec:
                               docker://${env.DST_IMAGE}
                               """
                               println("Image is successfully pushed to https://${env.DST_IMAGE}")
-                          }
+                      //    }
                     }
                 }
             }
