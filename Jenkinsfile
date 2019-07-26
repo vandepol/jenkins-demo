@@ -29,47 +29,47 @@ pipeline {
         }
     }
     // Build Application using Maven
-    stage('Maven build') {
-      steps {
-        sh """
-        env
-        mvn -v 
-        cd CustomerOrderServicesProject
-        mvn clean package
-        """
-      }
-    }
-      
-    // Run Maven unit tests
-    stage('Unit Test'){
-      steps {
-        sh """
-        mvn -v 
-        cd CustomerOrderServicesProject
-        mvn test
-        """
-      }
-    }
+//    stage('Maven build') {
+//      steps {
+//        sh """
+//        env
+//        mvn -v 
+//        cd CustomerOrderServicesProject
+//        mvn clean package
+//        """
+//      }
+//    }
+//      
+//    // Run Maven unit tests
+//    stage('Unit Test'){
+//     steps {
+//        sh """
+//        mvn -v 
+//        cd CustomerOrderServicesProject
+//        mvn test
+//        """
+//      }
+//    }
       
     // Build Container Image using the artifacts produced in previous stages
-    stage('Build Liberty App Image'){
-      steps {
-        script {
-          // Build container image using local Openshift cluster
-          openshift.withCluster() {
-            openshift.withProject() {
-              timeout (time: 10, unit: 'MINUTES') {
-                // run the build and wait for completion
-                def build = openshift.selector("bc", "${params.APPLICATION_NAME}").startBuild("--from-dir=.")
-                                    
-                // print the build logs
-                build.logs('-f')
-              }
-            }        
-          }
-        }
-      }
-    } 
+//    stage('Build Liberty App Image'){
+//     steps {
+//        script {
+//          // Build container image using local Openshift cluster
+//          openshift.withCluster() {
+//            openshift.withProject() {
+//              timeout (time: 10, unit: 'MINUTES') {
+//                // run the build and wait for completion
+//                def build = openshift.selector("bc", "${params.APPLICATION_NAME}").startBuild("--from-dir=.")
+//                                    
+//                // print the build logs
+//                build.logs('-f')
+//              }
+//            }        
+//          }
+//        }
+//      }
+//    } 
     
     
     stage ('Push Container Image') {
@@ -92,13 +92,13 @@ spec:
 
           steps {
               script {
-                  def srcImage = OUTPUT_IMAGE
+                  def srcImage = ${env.BUILD}/${env.APP_NAME}:latest
 
                   openshift.withCluster() {
                       openshift.withProject() {
                         def openshift_token = readFile "/var/run/secrets/kubernetes.io/serviceaccount/token"
 
-                        println "source image: ${srcImage}, dest image: ${env.DST_IMAGE}"
+                        println "source image: ${srcImage}, dest image: ${env.PROD}/${env.APP_NAME}:latest"
 
                         withCredentials([usernamePassword(credentialsId: "${env.EXTERNAL_IMAGE_REPO_CREDENTIALS}", passwordVariable: 'AFpasswd', usernameVariable: 'AFuser')]) {
                               sh """
