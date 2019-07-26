@@ -96,69 +96,28 @@ spec:
 
                   openshift.withCluster() {
                       openshift.withProject() {
-                        def openshift_token = readFile "/var/run/secrets/kubernetes.io/serviceaccount/token"
-
-                        println "source image: ${srcImage}, dest image: ${env.PROD}/${env.APP_NAME}:latest"
-
-                        withCredentials([usernamePassword(credentialsId: "${env.EXTERNAL_IMAGE_REPO_CREDENTIALS}", passwordVariable: 'AFpasswd', usernameVariable: 'AFuser')]) {
-                              sh """
-                              /usr/bin/skopeo copy \
-                              --src-creds openshift:${openshift_token} \
-                              --src-tls-verify=false \
-                              --dest-creds ${AFuser}:${AFpasswd} \
-                              --dest-tls-verify=false \
-                              docker://${srcImage} \
-                              docker://${env.DST_IMAGE}
-                              """
-                              println("Image is successfully pushed to https://${env.DST_IMAGE}")
-                          }
+                         openshift.tag("${env.BUILD}/${env.APP_NAME}:latest", "${env.DEV}/${env.APP_NAME}:latest")
+//                        def openshift_token = readFile "/var/run/secrets/kubernetes.io/serviceaccount/token"
+//
+ //                       println "source image: ${srcImage}, dest image: ${env.PROD}/${env.APP_NAME}:latest"
+//
+//                        withCredentials([usernamePassword(credentialsId: "${env.EXTERNAL_IMAGE_REPO_CREDENTIALS}", passwordVariable: 'AFpasswd', usernameVariable: 'AFuser')]) {
+//                              sh """
+//                              /usr/bin/skopeo copy \
+//                              --src-creds openshift:${openshift_token} \
+//                              --src-tls-verify=false \
+//                              --dest-creds ${AFuser}:${AFpasswd} \
+//                              --dest-tls-verify=false \
+//                              docker://${srcImage} \
+//                              docker://${env.DST_IMAGE}
+//                              """
+//                              println("Image is successfully pushed to https://${env.DST_IMAGE}")
+//                          }
                       }
                   }
               }
           }
         }
-    stage('Promote to Dev') {
-      steps {
-        script {
-          openshift.withCluster() {
-            openshift.withProject() {
-              openshift.tag("${env.BUILD}/${env.APP_NAME}:latest", "${env.DEV}/${env.APP_NAME}:latest")
-            }
-          }
-        }
-      }
-    }
 
-    stage('Promote to Stage') {
-      steps {
-        script {
-          openshift.withCluster() {
-            openshift.withProject() {
-              openshift.tag("${env.DEV}/${env.APP_NAME}:latest", "${env.STAGE}/${env.APP_NAME}:latest")
-            }
-          }
-        }
-      }
-    }
-
-    stage('Promotion gate') {
-      steps {
-        script {
-          input message: 'Promote application to Production?'
-        }
-      }
-    }
-
-    stage('Promote to Prod') {
-      steps {
-        script {
-          openshift.withCluster() {
-            openshift.withProject() {
-              openshift.tag("${env.STAGE}/${env.APP_NAME}:latest", "${env.PROD}/${env.APP_NAME}:latest")
-            }
-          }
-        }
-      }
-    }
   }
 }
