@@ -12,7 +12,7 @@ openshift.withCluster() {
   
   
   env.EXTERNAL_IMAGE_REPO_URL = "harbor.jkwong.cloudns.cx"
-  env.EXTERNAL_IMAGE_REPO_NAMESPACE = "roland-demo"
+  env.EXTERNAL_IMAGE_REPO_NAMESPACE = "roland-demo-build"
   env.EXTERNAL_IMAGE_REPO_CREDENTIALS = "harbor"
   env.DST_IMAGE = "${env.EXTERNAL_IMAGE_REPO_URL}/${env.EXTERNAL_IMAGE_REPO_NAMESPACE}/${env.APP_NAME}:${env.BUILD_NUMBER}"
   
