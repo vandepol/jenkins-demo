@@ -69,6 +69,10 @@ pipeline {
                 // run the build and wait for completion
                 def build = openshift.selector("bc", "${params.APPLICATION_NAME}").startBuild("--from-dir=.")
                                     
+                def buildObj = build.object()
+                def imageRef = buildObj.status.outputDockerImageReference
+                def tmpImg  = imageRef.indexOf("/")
+                OUTPUT_IMAGE = env.REGISTRY_ROUTE + "/" + imageRef.substring(tmpImg + 1, imageRef.length())
                 // print the build logs
                 build.logs('-f')
               }
@@ -101,8 +105,10 @@ spec:
             script {
                 openshift.withCluster() {
                     openshift.withProject() {
-                        echo "Using project: ${openshift.project()}"
-                        echo "APPLICATION_NAME: ${params.APPLICATION_NAME}"
+                      
+                      def srcImage = OUTPUT_IMAGE
+                     
+                      println "source image: ${srcImage}, dest image: ${env.DST_IMAGE}
                       
                       def openshift_token = readFile "/var/run/secrets/kubernetes.io/serviceaccount/token"
                       echo "Username: AFuser: ${env.AFuser}"
@@ -117,7 +123,7 @@ spec:
                               --src-tls-verify=false \
                               --dest-creds vandepol:42L0LN5we8 \
                               --dest-tls-verify=false \
-                              docker://docker-registry.default.svc:5000/roland-demo-build/roland-demo \
+                              docker://${srcImage} \
                               docker://${env.DST_IMAGE}
                               """
                               println("Image is successfully pushed to https://${env.DST_IMAGE}")
