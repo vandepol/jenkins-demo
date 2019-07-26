@@ -111,8 +111,9 @@ spec:
                       echo "Username: AFpasswd: ${params.AFpasswd}"
                 //      echo "Username: AFuser: ${AFuser}"
                 //      echo "Username: AFpasswd: ${AFpasswd}"
+                      def openshift_token = readFile "/var/run/secrets/kubernetes.io/serviceaccount/token"
                       
-                      withCredentials([usernamePassword(credentialsId: "${env.EXTERNAL_IMAGE_REPO_CREDENTIALS}", passwordVariable: 'AFpasswd', usernameVariable: 'AFuser')]) {
+                      withCredentials([usernamePassword(credentialsId: "${env.EXTERNAL_IMAGE_REPO_CREDENTIALS}", passwordVariable: 'username', usernameVariable: 'password')]) {
                               sh """
                               /usr/bin/skopeo copy \
                               --src-creds openshift:${openshift_token} \
