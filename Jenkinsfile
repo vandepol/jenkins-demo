@@ -110,18 +110,18 @@ spec:
                       echo "Username: AFuser: ${params.AFuser}"
                       echo "Username: AFpasswd: ${params.AFpasswd}"
                       
-                      withCredentials([usernamePassword(credentialsId: "${env.EXTERNAL_IMAGE_REPO_CREDENTIALS}", passwordVariable: 'username', usernameVariable: 'password')]) {
+                      //withCredentials([usernamePassword(credentialsId: "${env.EXTERNAL_IMAGE_REPO_CREDENTIALS}", passwordVariable: 'username', usernameVariable: 'password')]) {
                               sh """
                               /usr/bin/skopeo copy \
                               --src-creds openshift:${openshift_token} \
                               --src-tls-verify=false \
-                              --dest-creds ${AFuser}:${AFpassword} \
+                              --dest-creds vandepol:42L0LN5we8 \
                               --dest-tls-verify=false \
                               docker://${env.BUILD}/${env.APP_NAME}:latest \
-                              docker://vandepol/jenkins-test
+                              docker://${env.DST_IMAGE}
                               """
                               println("Image is successfully pushed to https://${env.DST_IMAGE}")
-                          }
+                     //     }
                     }
                 }
             }
