@@ -90,13 +90,13 @@ spec:
             }
           }
 
-          steps {
-              script {
-                  def srcImage = ${env.BUILD}/${env.APP_NAME}
-
-                  openshift.withCluster() {
-                      openshift.withProject() {
-                         openshift.tag("${env.BUILD}/${env.APP_NAME}:latest", "${env.DEV}/${env.APP_NAME}:latest")
+//          steps {
+//              script {
+//                  def srcImage = ${env.BUILD}/${env.APP_NAME}
+//
+//                  openshift.withCluster() {
+//                      openshift.withProject() {
+//                         openshift.tag("${env.BUILD}/${env.APP_NAME}:latest", "${env.DEV}/${env.APP_NAME}:latest")
 //                        def openshift_token = readFile "/var/run/secrets/kubernetes.io/serviceaccount/token"
 //
  //                       println "source image: ${srcImage}, dest image: ${env.PROD}/${env.APP_NAME}:latest"
@@ -113,10 +113,10 @@ spec:
 //                              """
 //                              println("Image is successfully pushed to https://${env.DST_IMAGE}")
 //                          }
-                      }
-                  }
-              }
-          }
+//                      }
+//                  }
+//              }
+//          }
         }
 
   }
