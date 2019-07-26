@@ -70,6 +70,53 @@ pipeline {
         }
       }
     } 
+    
+    
+    stage ('Push Container Image') {
+          agent {
+            kubernetes {
+              cloud 'openshift'
+              label 'skopeo-jenkins'
+              yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: jnlp
+    image: jkwong/skopeo-jenkins
+    tty: true
+  serviceAccountName: jenkins
+"""
+            }
+          }
+
+          steps {
+              script {
+                  def srcImage = OUTPUT_IMAGE
+
+                  openshift.withCluster() {
+                      openshift.withProject() {
+                        def openshift_token = readFile "/var/run/secrets/kubernetes.io/serviceaccount/token"
+
+                        println "source image: ${srcImage}, dest image: ${env.DST_IMAGE}"
+
+                        withCredentials([usernamePassword(credentialsId: "${env.EXTERNAL_IMAGE_REPO_CREDENTIALS}", passwordVariable: 'AFpasswd', usernameVariable: 'AFuser')]) {
+                              sh """
+                              /usr/bin/skopeo copy \
+                              --src-creds openshift:${openshift_token} \
+                              --src-tls-verify=false \
+                              --dest-creds ${AFuser}:${AFpasswd} \
+                              --dest-tls-verify=false \
+                              docker://${srcImage} \
+                              docker://${env.DST_IMAGE}
+                              """
+                              println("Image is successfully pushed to https://${env.DST_IMAGE}")
+                          }
+                      }
+                  }
+              }
+          }
+        }
     stage('Promote to Dev') {
       steps {
         script {
